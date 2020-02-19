@@ -1,0 +1,42 @@
+---
+title: "individual2"
+author: "Tyler Smith"
+date: "February 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(ggmosaic)
+
+dat <- read_xls("C:/Users/Tyler/Desktop/ds202_lab3/lab3.xls")
+head(dat)
+names(dat) <- c("Year","Happy","Party","Income1","Income2","Sex","Marital","Job","ID","Ballot")
+
+#Problem 1 - Ritz
+dat$Happy <- factor(dat$Happy, levels = c("No answer","Don't know","Data collection: General Social Survey\nCase Selection: all cases","Not applicable","Not too happy","Pretty happy","Very happy"))
+ggplot(dat,aes(x=Happy))+geom_bar()+facet_grid(~Marital)
+
+#Problem 2 - Ritz
+ggplot(dat,aes(x=Happy,fill=Sex))+geom_bar()+facet_grid(~Marital)
+
+#Problem 3 - Ty
+dat$Party <- factor(dat$Party,levels=c("Don't know","No answer","Strong democrat","Not str democrat","Ind,near dem","Independent","Ind,near rep","Not str republican","Strong republican","Other party"))
+levels(dat$Party)
+ggplot(dat,aes(x=Happy))+geom_bar()+facet_grid(~Party)
+
+#Problem 4
+#How does income affect happiness? - Ty
+#How does party affect income? - Ty
+#How does sex affect income? - Ritz
+#How does income and sex affect happiness? - facet_grid - TY
+
+```
+
