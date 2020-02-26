@@ -17,7 +17,7 @@ library(ggplot2)
 library(ggmosaic)
 
 dat <- read_xls("lab3.xls")
-head(dat)
+
 names(dat) <- c("Year","Happy","Party","Income1","Income2","Sex","Marital","Job","ID","Ballot")
 
 #Problem 1 
@@ -40,13 +40,27 @@ Response: Within each group, females are happier than males.
 #Problem 3 
 ```{r}
 dat$Party <- factor(dat$Party,levels=c("Don't know","No answer","Strong democrat","Not str democrat","Ind,near dem","Independent","Ind,near rep","Not str republican","Strong republican","Other party"))
-levels(dat$Party)
 ggplot(dat,aes(x=Happy))+geom_bar()+facet_grid(~Party)
 ```
 
+Overall, we do not see much of a difference in the happiness for any group. It does appear that a greater percentage of  strong republicans were in the very happy category as opposed to the pretty happy category. The other parties see a peak at somewhat happy, with very happy being the second-most populated category.  
+
 #Problem 4
 # a.How does income affect happiness? 
-#b. How does party affect income? 
+```{r}
+ggplot(dat,aes(x=Happy))+geom_bar()+facet_wrap(~Income1,scales='free_y')
+```
+  
+It does appear that the income of a person plays some role in the happiness of a person. Once the income gets above 20,000, it appears that there is a greater number of people answers very happy, mostly in place of not too happy. This appears to be the case all the way up through the income ranges.
+ 
+
+#b. How does income affect party?   
+```{r}
+ggplot(dat,aes(x=Party))+geom_bar()+facet_wrap(~Income1,scales='free_y')
+```
+  
+When further investigating the question of party affecting income, we see that the plot is not very intuitive since there are too many people who lie in the Not Applicable category. With the data we can get, there appears to be more Democratic-leaning people in most of the plots.
+
 #c. How does sex affect income? 
 ```{r}
 #The below two lines of codes help in adding the 'Codes' of the income range given in the tab 'Codes'. I used the codes for 'Income72' as it had the same values as stated in the 'Total Family Income' column. The 'kv' table has two columns 'Income1' and 'Code'. This is then appended to the main table 'dat' so that the column 'Code' is added to the main table. The other lines of codes help in creating the data set for the histograms.
@@ -65,11 +79,15 @@ hist(d4$Code, breaks = 100)#This generates a graph of the number of Females for 
 
 ```
 
-
 Response: The graph with d3$Code represents data for Males and the one with d4$Code represents data for Females. As can be seen from the graphs, frequency of Females at higher income levels is lower compared to Males and for lower income levels the frequency of Females is higher than Males. Thus indicating that Males earn more in the higher income bracket compared to women. 
 
 
 # d.How does income and sex affect happiness? - facet_grid
+```{r}
+ggplot(dat,aes(x=Happy,fill=Sex))+geom_bar()+facet_wrap(~Income1,scales='free_y')
+```
+  
+In general, it appears that women are not nearly as prevelant in the not very happy role, especially compared to men. This is the case for most incomes at  6,000 or above. The refused box was of interest as women actualy had more positive responses in this case.
 
 ```
 
