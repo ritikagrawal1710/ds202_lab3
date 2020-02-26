@@ -1,0 +1,75 @@
+---
+title: "Team Lab 3"
+author: "Tyler Smith, Ritika Agrawal"
+date: "February 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(ggmosaic)
+
+dat <- read_xls("lab3.xls")
+head(dat)
+names(dat) <- c("Year","Happy","Party","Income1","Income2","Sex","Marital","Job","ID","Ballot")
+
+#Problem 1 
+dat$Happy <- factor(dat$Happy, levels = c("No answer","Don't know","Not applicable","Not too happy","Pretty happy","Very happy"))
+ggplot(dat,aes(x=Happy))+geom_bar()+facet_grid(~Marital)
+```
+
+
+Response: As can be seen from the graph, married people compared to the other groups are more in the categories of 'pretty happy' or 'very happy'. 
+
+
+#Problem 2 
+```{r}
+ggplot(dat,aes(x=Happy,fill=Sex))+geom_bar()+facet_grid(~Marital)
+```
+
+Response: Within each group, females are happier than males. 
+
+
+#Problem 3 
+```{r}
+dat$Party <- factor(dat$Party,levels=c("Don't know","No answer","Strong democrat","Not str democrat","Ind,near dem","Independent","Ind,near rep","Not str republican","Strong republican","Other party"))
+levels(dat$Party)
+ggplot(dat,aes(x=Happy))+geom_bar()+facet_grid(~Party)
+```
+
+#Problem 4
+# a.How does income affect happiness? 
+#b. How does party affect income? 
+#c. How does sex affect income? 
+```{r}
+#The below two lines of codes help in adding the 'Codes' of the income range given in the tab 'Codes'. I used the codes for 'Income72' as it had the same values as stated in the 'Total Family Income' column. The 'kv' table has two columns 'Income1' and 'Code'. This is then appended to the main table 'dat' so that the column 'Code' is added to the main table. The other lines of codes help in creating the data set for the histograms.
+
+kv <- read_excel("kv.xlsx") #kv-Key Values
+d = merge(x = dat, y = kv, by = "Income1", all.x = TRUE)
+
+d2 <- subset(d, d$Code != 0)
+d2$Code = as.integer(d2$Code)
+d3 <- subset(d2, d$Sex == "Male")
+d4 <- subset(d2, d$Sex == "Female")
+
+
+hist(d3$Code, breaks = 100) #This generates a graph of the number of Males for a given income level
+hist(d4$Code, breaks = 100)#This generates a graph of the number of Females for a given income level
+
+```
+
+
+Response: The graph with d3$Code represents data for Males and the one with d4$Code represents data for Females. As can be seen from the graphs, frequency of Females at higher income levels is lower compared to Males and for lower income levels the frequency of Females is higher than Males. Thus indicating that Males earn more in the higher income bracket compared to women. 
+
+
+# d.How does income and sex affect happiness? - facet_grid
+
+```
+
